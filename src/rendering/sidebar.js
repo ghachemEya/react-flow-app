@@ -18,6 +18,8 @@ export default () => {
         draggable
       >
         Input Node
+
+        
       </div>
       <div
         className="dndnode"

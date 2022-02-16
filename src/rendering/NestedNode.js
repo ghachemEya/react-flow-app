@@ -18,15 +18,16 @@ export const NestedNode: React.FC<NodeProps> = ({ data }) => {
           style={{
             width: "300px",
             height: "300px",
-            overflow: "visible",
             fontSize: "1px",
-            pointerEvents: "none"
+            pointerEvents: "none",
+            overflow: 'visible'
           }}
         >
           {z >= 1 && (
             <ReactFlowProvider>
               <ReactFlow
-                maxZoom={0.5}
+                onlyRenderVisibleElements={false}
+                preventScrolling={false}
                 defaultZoom={0.5}
                 defaultPosition={[0, 0]}
                 zoomOnScroll={true}
