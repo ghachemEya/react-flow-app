@@ -27,7 +27,8 @@ const initialElements = [
             width: "70px",
             height: "40px",
             fontSize: "18px",
-            overflow: 'visible'
+            overflow: 'visible',
+            zIndex: "1"
           },
         },
         {
@@ -38,7 +39,8 @@ const initialElements = [
             width: "70px",
             height: "40px",
             fontSize: "18px",
-            overflow: 'visible'
+            overflow: 'visible',
+            zIndex: "1"
           },
         },
         { id: "e3", source: "3", target: "4", animated: false },
@@ -63,8 +65,14 @@ const DragAndDrop = () => {
   const onConnect = (params) => setElements((els) => addEdge(params, els));
   const onElementsRemove = (elementsToRemove) =>
     setElements((els) => removeElements(elementsToRemove, els));
+
   const onLoad = (_reactFlowInstance) =>
     setReactFlowInstance(_reactFlowInstance);
+  
+    
+     
+
+  
   const onDragOver = (event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
@@ -88,7 +96,8 @@ const DragAndDrop = () => {
         width: "70px",
         height: "40px",
         fontSize: "18px",
-        overflow: 'visible'
+        overflow: 'visible',
+        zIndex: "1"
       },
     };
 
@@ -100,7 +109,12 @@ const DragAndDrop = () => {
     ) {
       let new_elts = elements;
       let id_prev = newNode.id - 1;
-
+      let pos  = {
+        x: position.x,
+        y: position.y
+      }
+      console.log(pos)
+      newNode.position = pos
       new_elts[1].data.children.push(newNode);
       new_elts[1].data.children.push({
         id: `e${newNode.id}`,
@@ -109,6 +123,17 @@ const DragAndDrop = () => {
         animated: false
       });
       setElements(new_elts);
+     reactFlowInstance.zoomOut()
+     reactFlowInstance.zoomOut()
+     reactFlowInstance.zoomOut()
+     reactFlowInstance.zoomOut()
+     reactFlowInstance.zoomIn()
+     reactFlowInstance.zoomIn()
+     reactFlowInstance.zoomIn()
+     reactFlowInstance.zoomIn()
+     
+      
+      
     } else {
       setElements((es) => es.concat(newNode));
     }
@@ -120,7 +145,7 @@ const DragAndDrop = () => {
       <ReactFlowProvider>
         <div
           className="reactflow-wrapper"
-          style={{ height: "800px", width: "800px" }}
+          style={{ height: "100vh", width: "100%" }}
           ref={reactFlowWrapper}
         >
           <ReactFlow

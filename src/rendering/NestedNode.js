@@ -20,24 +20,20 @@ export const NestedNode: React.FC<NodeProps> = ({ data }) => {
             height: "300px",
             fontSize: "1px",
             pointerEvents: "none",
-            overflow: 'visible'
+            overflow: 'hidden',
+            zIndex: "1"
           }}
         >
           {z >= 1 && (
             <ReactFlowProvider>
               <ReactFlow
-                onlyRenderVisibleElements={false}
-                preventScrolling={false}
+                  
                 defaultZoom={0.5}
                 defaultPosition={[0, 0]}
                 zoomOnScroll={true}
-                translateExtent={[
-                  [0, 0],
-                  [+100, +100]
-                ]}
                 nodeExtent={[
                   [0, 0],
-                  [+100, +100]
+                  [+100, +200]
                 ]}
                 elements={children}
               />
