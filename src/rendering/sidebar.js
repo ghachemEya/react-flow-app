@@ -1,7 +1,5 @@
 import React from "react";
 
-
-
 export default () => {
   const onDragStart = (event, nodeType) => {
     event.dataTransfer.setData("application/reactflow", nodeType);
@@ -18,8 +16,6 @@ export default () => {
         draggable
       >
         Input Node
-
-        
       </div>
       <div
         className="dndnode"

@@ -4,40 +4,41 @@ import ReactFlow, {
   Position,
   NodeProps,
   ReactFlowProvider,
-  useStoreState
+  useStoreState,
 } from "react-flow-renderer";
 
 export const NestedNode: React.FC<NodeProps> = ({ data }) => {
   const { children, label } = data;
   const [, , z] = useStoreState((state) => state.transform);
+
   return (
-    <div style={{ border: "1px solid red"}}>
+    <div style={{ border: "1px solid blue", overflow: "hidden", zIndex: "1" }}>
       <Handle type="target" position={Position.Top} />
       <div style={{ position: "relative" }}>
-        <div
+        <div 
           style={{
-            width: "300px",
-            height: "300px",
-            fontSize: "1px",
-            pointerEvents: "none",
-            overflow: 'hidden',
-            zIndex: "1"
+            width: "500px",
+            height: "500px",
+            fontSize: "10px",
           }}
         >
           {z >= 1 && (
-            <ReactFlowProvider>
+           
+             
+             <ReactFlowProvider>
               <ReactFlow
-                  
                 defaultZoom={0.5}
                 defaultPosition={[0, 0]}
                 zoomOnScroll={true}
                 nodeExtent={[
                   [0, 0],
-                  [+100, +200]
+                  [+100, +200],
                 ]}
                 elements={children}
               />
             </ReactFlowProvider>
+             
+    
           )}
           {z < 1 && label}
         </div>

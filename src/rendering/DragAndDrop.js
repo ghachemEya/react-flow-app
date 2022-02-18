@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback, Fragment } from "react";
+
 import ReactFlow, {
   ReactFlowProvider,
   addEdge,
@@ -18,33 +19,7 @@ const initialElements = [
     id: "2",
     data: {
       label: <div>Hello world</div>,
-      children: [
-        {
-          id: "3",
-          data: { label: <div>sub Node 1</div> },
-          position: { x: 0, y: 0 },
-          style: {
-            width: "70px",
-            height: "40px",
-            fontSize: "18px",
-            overflow: 'visible',
-            zIndex: "1"
-          },
-        },
-        {
-          id: "4",
-          data: { label: <div>sub Node 2</div> },
-          position: { x: 1000, y: 300 },
-          style: {
-            width: "70px",
-            height: "40px",
-            fontSize: "18px",
-            overflow: 'visible',
-            zIndex: "1"
-          },
-        },
-        { id: "e3", source: "3", target: "4", animated: false },
-      ],
+      children: [{}],
     },
     position: { x: 100, y: 100 },
     draggable: false,
@@ -52,12 +27,13 @@ const initialElements = [
   },
   { id: "e1", source: "1", target: "2", animated: false },
 ];
-let id = 5;
-const pos_X = initialElements[1].position.x;
 
+let id = 3;
+const pos_X = initialElements[1].position.x;
 const pos_Y = initialElements[1].position.y;
-console.log({ pos_X, pos_Y });
+
 const getId = () => `${id++}`;
+
 const DragAndDrop = () => {
   const reactFlowWrapper = useRef(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
@@ -66,13 +42,13 @@ const DragAndDrop = () => {
   const onElementsRemove = (elementsToRemove) =>
     setElements((els) => removeElements(elementsToRemove, els));
 
-  const onLoad = (_reactFlowInstance) =>
-    setReactFlowInstance(_reactFlowInstance);
-  
-    
-     
+  const onLoad = useCallback(
+    (_reactFlowInstance) => {
+      setReactFlowInstance(_reactFlowInstance);
+    },
+    [elements]
+  );
 
-  
   const onDragOver = (event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
@@ -92,65 +68,51 @@ const DragAndDrop = () => {
       type,
       position,
       data: { label: <div>sub Node {id}</div> },
-      style: {
-        width: "70px",
-        height: "40px",
-        fontSize: "18px",
-        overflow: 'visible',
-        zIndex: "1"
-      },
     };
 
     if (
       position.x > pos_X &&
       position.y > pos_Y &&
-      position.x < pos_X + 300 &&
-      position.y < pos_Y + 300
+      position.x < pos_X + 500 &&
+      position.y < pos_Y + 500
     ) {
       let new_elts = elements;
       let id_prev = newNode.id - 1;
-      let pos  = {
-        x: position.x,
-        y: position.y
-      }
-      console.log(pos)
-      newNode.position = pos
       new_elts[1].data.children.push(newNode);
       new_elts[1].data.children.push({
         id: `e${newNode.id}`,
         source: `${id_prev}`,
         target: `${newNode.id}`,
-        animated: false
+        type: "output",
+        animated: false,
       });
       setElements(new_elts);
-     reactFlowInstance.zoomOut()
-     reactFlowInstance.zoomOut()
-     reactFlowInstance.zoomOut()
-     reactFlowInstance.zoomOut()
-     reactFlowInstance.zoomIn()
-     reactFlowInstance.zoomIn()
-     reactFlowInstance.zoomIn()
-     reactFlowInstance.zoomIn()
-     
-      
-      
+      reactFlowInstance.zoomOut();
+      reactFlowInstance.zoomOut();
+      reactFlowInstance.zoomOut();
+      reactFlowInstance.zoomOut();
+      reactFlowInstance.zoomIn();
+      reactFlowInstance.zoomIn();
+      reactFlowInstance.zoomIn();
+      reactFlowInstance.zoomIn();
     } else {
-      setElements((es) => es.concat(newNode));
+      setElements(() => elements.concat(newNode));
     }
   };
 
-  useEffect(() => {}, [elements]);
   return (
-    <div className="dndflow">
-      <ReactFlowProvider>
+    <div className="dndflow" ref={reactFlowWrapper}>
+      <Fragment>
         <div
           className="reactflow-wrapper"
           style={{ height: "100vh", width: "100%" }}
-          ref={reactFlowWrapper}
         >
           <ReactFlow
-            snapGrid={[30, 30]}
             elements={elements}
+            connectionLineStyle={{stroke: "#ddd", strokeWidth: 2}}
+            connectionLineType = "bezier"
+            
+            snapGrid={[16,16]}
             onConnect={onConnect}
             onElementsRemove={onElementsRemove}
             onLoad={onLoad}
@@ -160,13 +122,13 @@ const DragAndDrop = () => {
               nestedNode: NestedNode,
             }}
           >
-           <MiniMap />
-          <Controls />
-          <Background />
+            <MiniMap />
+            <Controls />
+            <Background color="#aaa" gap={20} />
           </ReactFlow>
         </div>
         <Sidebar />
-      </ReactFlowProvider>
+      </Fragment>
     </div>
   );
 };

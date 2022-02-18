@@ -1,16 +1,26 @@
+import React, {useState} from "react";
+import { ReactSortable, Sortable, MultiDrag, Swap } from "react-sortablejs";
 
-import './App.css';
+// mount whatever plugins you'd like to. These are the only current options.
+Sortable.mount(new MultiDrag(), new Swap());
 
-import Flow from './rendering/Flow';
-import DragAndDrop from './rendering/DragAndDrop'
-
-function App() {
+const App = () => {
+  const [state, setState] = useState([
+    { id: 1, name: "shrek" },
+    { id: 2, name: "fiona" },
+  ]);
 
   return (
-    <div className="App">
-     <DragAndDrop />
-    </div>
+    <ReactSortable
+      multiDrag // enables mutidrag
+      // OR
+      swap // enables swap
+    >
+      {state.map((item) => (
+        <div key={item.id}>{item.name}</div>
+      ))}
+    </ReactSortable>
   );
-}
+};
 
 export default App;
